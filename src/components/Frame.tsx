@@ -17,19 +17,50 @@ import { createStore } from "mipd";
 import { Label } from "~/components/ui/label";
 import { PROJECT_TITLE } from "~/lib/constants";
 
-function ExampleCard() {
+const IMAGES = [
+  "https://i.imgur.com/abc123.jpg", // Replace with actual image URLs
+  "https://i.imgur.com/def456.jpg",
+  "https://i.imgur.com/ghi789.jpg",
+  "https://i.imgur.com/jkl012.jpg",
+  "https://i.imgur.com/mno345.jpg"
+];
+
+function ImageGallery() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % IMAGES.length);
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + IMAGES.length) % IMAGES.length);
+  }, []);
+
   return (
     <Card className="border-neutral-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-neutral-900">Welcome to the Frame Template</CardTitle>
+        <CardTitle className="text-neutral-900">Onsen Gallery</CardTitle>
         <CardDescription className="text-neutral-600">
-          This is an example card that you can customize or remove
+          Recent images from onsenbot
         </CardDescription>
       </CardHeader>
-      <CardContent className="text-neutral-800">
-        <p>
-          Your frame content goes here. The text is intentionally dark to ensure good readability.
-        </p>
+      <CardContent className="flex flex-col items-center gap-4">
+        <img 
+          src={IMAGES[currentIndex]} 
+          alt={`Gallery image ${currentIndex + 1}`}
+          className="w-full h-48 object-cover rounded-lg"
+        />
+        <div className="flex gap-2">
+          <PurpleButton onClick={handlePrev} disabled={currentIndex === 0}>
+            Previous
+          </PurpleButton>
+          <PurpleButton onClick={handleNext} disabled={currentIndex === IMAGES.length - 1}>
+            Next
+          </PurpleButton>
+        </div>
+        <div className="text-sm text-neutral-600">
+          Image {currentIndex + 1} of {IMAGES.length}
+        </div>
       </CardContent>
     </Card>
   );
@@ -137,7 +168,7 @@ export default function Frame(
     >
       <div className="w-[300px] mx-auto py-2 px-2">
         <h1 className="text-2xl font-bold text-center mb-4 text-neutral-900">{title}</h1>
-        <ExampleCard />
+        <ImageGallery />
       </div>
     </div>
   );
